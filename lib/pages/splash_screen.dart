@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_authentication/pages/home_page.dart';
+
 import 'login_page.dart';
 import 'package:firebase_authentication/utils.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +21,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void redirectPage() async {
     await Future.delayed(const Duration(seconds: 3), () {
-      //TODO: redireccionamiento a la pagina
-      navigatorPushReplacement(context, const LoginPage());
+      var currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        navigatorPushReplacement(context, const HomePage());
+        print('---> ${currentUser.uid}');
+      } else {
+        navigatorPushReplacement(context, const LoginPage());
+      }
     });
   }
 
