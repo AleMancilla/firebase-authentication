@@ -21,10 +21,10 @@ class _LoginPageState extends State<LoginPage> {
         body: IndexedStack(
           index: _indexPage,
           children: [
-            LoginAnonimo(),
+            const LoginAnonimo(),
             LoginEmailPass(),
-            LoginGoogle(),
-            LoginFacebook(),
+            const LoginGoogle(),
+            const LoginFacebook(),
             LoginPhone(),
           ],
         ),
