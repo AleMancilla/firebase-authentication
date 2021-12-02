@@ -3,6 +3,7 @@ import 'package:firebase_authentication/pages/login_page.dart';
 import 'package:firebase_authentication/utils.dart';
 import 'package:firebase_authentication/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -19,6 +20,12 @@ class HomePage extends StatelessWidget {
               textButton: 'cerrar sesion',
               ontap: () async {
                 await FirebaseAuth.instance.signOut();
+                try {
+                  final GoogleSignInAccount? googleUser =
+                      await GoogleSignIn().signOut();
+                } catch (e) {
+                  print(e);
+                }
                 navigatorPushReplacement(context, const LoginPage());
               }),
           Text('Sesion Iniciada'),
