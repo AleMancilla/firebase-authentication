@@ -17,3 +17,12 @@ void navigatorPush(BuildContext context, Widget route) {
     ),
   );
 }
+
+void snackBarMessageError(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.red,
+      content: Text(text),
+    ),
+  );
+}

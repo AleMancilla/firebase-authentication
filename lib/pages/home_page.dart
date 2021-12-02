@@ -1,13 +1,41 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_authentication/pages/login_page.dart';
+import 'package:firebase_authentication/utils.dart';
+import 'package:firebase_authentication/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+  User? auth = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Sesion Iniciada'),
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Divider(),
+          ButtonWidget(
+              textButton: 'cerrar sesion',
+              ontap: () async {
+                await FirebaseAuth.instance.signOut();
+                navigatorPushReplacement(context, const LoginPage());
+              }),
+          Text('Sesion Iniciada'),
+          Text('displayName --- ${auth?.displayName}'),
+          Text('email --- ${auth?.email}'),
+          Text('emailVerified --- ${auth?.emailVerified}'),
+          Text('isAnonymous --- ${auth?.isAnonymous}'),
+          Text('metadata --- ${auth?.metadata}'),
+          Text('phoneNumber --- ${auth?.phoneNumber}'),
+          Text('photoURL --- ${auth?.photoURL}'),
+          Text('providerData --- ${auth?.providerData}'),
+          Text('refreshToken --- ${auth?.refreshToken}'),
+          Text('tenantId --- ${auth?.tenantId}'),
+          Text('uid --- ${auth?.uid}'),
+          Text('hashCode --- ${auth?.hashCode}'),
+          Text('runtimeType --- ${auth?.runtimeType}'),
+        ],
       ),
     );
   }
