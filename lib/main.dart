@@ -1,10 +1,14 @@
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+late List<CameraDescription> cameras;
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  cameras = await availableCameras();
   runApp(const MyApp());
 }
 
