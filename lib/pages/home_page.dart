@@ -8,6 +8,7 @@ import 'package:firebase_authentication/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -21,7 +22,8 @@ class _HomePageState extends State<HomePage> {
 
   File? imageFile;
   List<File>? listimageFile;
-
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
   @override
   void initState() {
     super.initState();
@@ -82,24 +84,56 @@ class _HomePageState extends State<HomePage> {
             Text('hashCode --- ${auth?.hashCode}'),
             Text('runtimeType --- ${auth?.runtimeType}'),
             const Divider(),
+            ButtonWidget(
+              textButton: 'show path',
+              ontap: () {
+                if (listimageFile != null) {
+                  listimageFile!.forEach(
+                    (element) {
+                      print('-------- ${element.path}---');
+                    },
+                  );
+                }
+                if (imageFile != null) {
+                  print('-------- ${imageFile!.path}---');
+                  print('-------- ${imageFile!.absolute}---');
+                }
+              },
+            ),
+            ButtonWidget(
+              textButton: 'Subir foto',
+              ontap: () {
+                if (imageFile != null) {
+                  uploadFile(imageFile!.path);
+                  print('-------- ${imageFile!.path}---');
+                }
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _camara(CameraController? _controller) {
+  Future<void> uploadFile(String filePath) async {
+    File file = File(filePath);
+    String name = filePath.substring(filePath.lastIndexOf('/'));
+
     try {
-      return Container(
-        width: 150,
-        height: 150,
-        child: CameraPreview(
-          _controller!,
-          child: Text('data'),
-        ),
-      );
+      await firebase_storage.FirebaseStorage.instance
+          .ref('uploads/$name')
+          .putFile(file)
+          .then((p0) async {
+        print('##############################');
+        print(p0.ref.fullPath);
+        print(p0.ref.bucket);
+        String url = await p0.ref.getDownloadURL();
+        print(url);
+        print('##############################');
+      });
     } catch (e) {
-      return CircularProgressIndicator();
+      // e.g, e.code == 'canceled'
+      print(" ###### $e");
     }
   }
 
